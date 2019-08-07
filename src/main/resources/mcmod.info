@@ -1,16 +1,13 @@
-[
-{
-  "modid": "examplemod",
-  "name": "Example Mod",
-  "description": "Example placeholder mod.",
+[{
+  "modid": "interactions",
+  "name": "Interactions",
+  "description": "Add (right-click) interactions to Minecraft.",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "",
   "updateUrl": "",
-  "authorList": ["ExampleDude"],
-  "credits": "The Forge and FML guys, for making this example",
+  "authorList": ["TimInc"],
   "logoFile": "",
   "screenshots": [],
   "dependencies": []
-}
-]
+}]

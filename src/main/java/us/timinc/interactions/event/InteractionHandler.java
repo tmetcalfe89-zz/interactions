@@ -1,121 +1,91 @@
 package us.timinc.interactions.event;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonIOException;
-import com.google.gson.JsonSyntaxException;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.item.Item;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import us.timinc.interactions.recipe.InteractRecipe;
+import us.timinc.interactions.recipe.InteractRecipes;
+import us.timinc.interactions.util.MinecraftUtil;
 
+/**
+ * Implements the logic in recipes matching events.
+ * 
+ * @author Tim
+ *
+ */
 public class InteractionHandler {
-	private HashMap<String, ArrayList<InteractRecipe>> recipes = new HashMap<>();
-	private Gson gson;
+	private InteractRecipes interactRecipes;
 
+	/**
+	 * Creates a new interaction handler. Initializes recipes.
+	 */
 	public InteractionHandler() {
-		gson = new Gson();
+		interactRecipes = new InteractRecipes();
 	}
 
-	public void addRecipe(InteractRecipe recipe) {
-		if (!recipes.containsKey(recipe.targetBlockId)) {
-			recipes.put(recipe.targetBlockId, new ArrayList<InteractRecipe>());
-		}
-		recipes.get(recipe.targetBlockId).add(recipe);
-	}
-
-	public void addRecipesFrom(File file) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
-		InteractRecipe[] newRecipes = gson.fromJson(new FileReader(file), InteractRecipe[].class);
-		for (int i = 0; i < newRecipes.length; i++) {
-			addRecipe(newRecipes[i]);
-		}
-	}
-
-	public void checkForInteractions(PlayerInteractEvent.RightClickBlock event) {
-		if (!event.getEntityPlayer().canPlayerEdit(event.getPos(), event.getFace(),
-				event.getEntityPlayer().getHeldItem(event.getHand())))
+	/**
+	 * Subscribes to the player right clicking a block. Checks that it's a valid
+	 * event, then processes it.
+	 * 
+	 * @param event
+	 *            The interaction event.
+	 */
+	@SubscribeEvent
+	public void onInteraction(PlayerInteractEvent.RightClickBlock event) {
+		if (event.getWorld().isRemote)
 			return;
 
-		String targetBlockId = getBlockId(event.getWorld().getBlockState(event.getPos()));
-		String heldItemId = getItemId(event.getEntityPlayer().getHeldItem(event.getHand()));
-
-		InteractRecipe match = findMatch(targetBlockId, heldItemId);
-		if (match != null) {
-			if (match.changesBlock() && match.rollForChangeBlock()) {
-				event.getWorld().setBlockState(event.getPos(), match.getIntoBlock());
-			}
-			if (match.dropsItem() && match.rollForDropItem()) {
-				event.getWorld().spawnEntity(new EntityItem(event.getWorld(), event.getPos().getX(),
-						event.getPos().getY(), event.getPos().getZ(), match.createDrop()));
-			}
-			if (match.damagesItem() && match.rollForDamageItem()) {
-				ItemStack heldItem = event.getEntityPlayer().getHeldItem(event.getHand());
-				if (heldItem.isItemStackDamageable()) {
-					heldItem.damageItem(match.getDamage(), event.getEntityPlayer());
-				} else {
-					heldItem.shrink(match.getDamage());
-				}
-			}
-		}
-	}
-
-	public InteractRecipe findMatch(String targetBlockId, String heldItemId) {
-		InteractRecipe match = null;
-		if (recipes.containsKey(targetBlockId)) {
-			ArrayList<InteractRecipe> possibleMatches = recipes.get(targetBlockId);
-
-			int i = 0;
-			while (match == null && i < possibleMatches.size()) {
-				InteractRecipe testRecipe = possibleMatches.get(i);
-				if (testRecipe.matches(targetBlockId, heldItemId)) {
-					match = testRecipe;
-				}
-				i++;
-			}
-		}
-		return match;
-	}
-
-	public String getBlockId(IBlockState blockState) {
-		Block block = blockState.getBlock();
-		return block.getRegistryName().toString() + ":" + block.getMetaFromState(blockState);
-	}
-
-	public String getItemId(ItemStack itemStack) {
-		Item item = itemStack.getItem();
-		return item.getRegistryName().toString() + ":" + itemStack.getMetadata();
-	}
-
-	@SubscribeEvent
-	public void interaction(PlayerInteractEvent.RightClickBlock event) {
-		if (event.getWorld().isRemote)
+		if (!event.getEntityPlayer().canPlayerEdit(event.getPos(), event.getFace(),
+				event.getEntityPlayer().getHeldItem(event.getHand())))
 			return;
 
 		checkForInteractions(event);
 	}
 
-	public void loadRecipes() {
-		File globalDir = new File("interactions");
-		if (!globalDir.exists())
-			globalDir.mkdirs();
-		String[] files = globalDir.list();
-		files = Arrays.stream(files).filter(x -> x.endsWith(".json")).toArray(String[]::new);
-		for (int i = 0; i < files.length; i++) {
-			try {
-				addRecipesFrom(new File(globalDir, files[i]));
-			} catch (JsonSyntaxException | JsonIOException | FileNotFoundException e) {
-				e.printStackTrace();
+	/**
+	 * The core of the event processing. We look for an interact recipe that
+	 * matches the event, check to see what it does, roll for the modifications
+	 * it makes, and execute the changes.
+	 * 
+	 * @param event
+	 *            The interaction event.
+	 */
+	private void checkForInteractions(RightClickBlock event) {
+		// Create a matcher from the event to compare against existing recipes.
+		InteractRecipeMatcher eventMatcher = InteractRecipeMatcher.buildFromEvent(event);
+
+		// Find a match against the event.
+		InteractRecipe match = interactRecipes.findMatch(eventMatcher);
+		// If there is no match, nothing happens.
+		if (match != null) {
+			World world = event.getWorld();
+			BlockPos targetPosition = event.getPos();
+			EntityPlayer player = event.getEntityPlayer();
+			ItemStack heldItem = player.getHeldItem(event.getHand());
+
+			// If the recipe changes the target block, roll for it, and do it if
+			// successful.
+			if (match.changesTargetBlock() && match.rollForChangeBlock()) {
+				world.setBlockState(targetPosition, match.getChangeBlockState());
+			}
+
+			// If the recipe drops an item from the target block, roll for it,
+			// and do it if successful.
+			if (match.dropsItem() && match.rollForDropItem()) {
+				EntityItem itemDropEntity = MinecraftUtil.createEntityItem(world, targetPosition, match.createDrop());
+
+				world.spawnEntity(itemDropEntity);
+			}
+
+			// If the recipe damages the held item, roll for it, and do it if
+			// successful.
+			if (match.damagesHeldItem() && match.rollForDamageItem()) {
+				MinecraftUtil.damageItemStack(heldItem, match.getDamage(), player);
 			}
 		}
 	}

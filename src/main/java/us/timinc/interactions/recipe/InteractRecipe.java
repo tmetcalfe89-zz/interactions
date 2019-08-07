@@ -2,88 +2,176 @@ package us.timinc.interactions.recipe;
 
 import com.google.gson.annotations.SerializedName;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import us.timinc.interactions.event.InteractRecipeMatcher;
+import us.timinc.interactions.util.IdUtil;
 import us.timinc.interactions.util.RandUtil;
 
+/**
+ * Holds all of the details about a particular interact recipe.
+ * 
+ * @author Tim
+ *
+ */
 public class InteractRecipe {
+	/**
+	 * The ID of the block that has been interacted with in the world.
+	 */
 	@SerializedName("targetBlock")
-	public String targetBlockId = "minecraft:dirt:0";
-	@SerializedName("handItem")
-	public String handItemId = "minecraft:air:0";
-	@SerializedName("changeBlock")
-	public String changeBlockId = "";
-	public String changeChance = "";
+	public String targetBlockId = "";
+	/**
+	 * The ID of the item held in the player's hand. Note that we check both the
+	 * main hand and the off hand.
+	 */
+	@SerializedName("heldItem")
+	public String heldItemId = "";
+	/**
+	 * The ID of the block to replace the target block into in the world.
+	 */
+	@SerializedName("replacementBlock")
+	public String replacementBlockId = "";
+	/**
+	 * The chance (x in y represented as x:y) for the target block to be
+	 * replaced.
+	 */
+	public String replacementChance = "";
+	/**
+	 * The ID of the item to drop.
+	 */
 	@SerializedName("dropItem")
 	public String dropItemId = "";
+	/**
+	 * The chance (x in y represented as x:y) for an item to be dropped.
+	 */
 	public String dropChance = "";
+	/**
+	 * The damage to be dealt to the held item.
+	 * 
+	 * @see us.timinc.interactions.util.MinecraftUtil#damageItemStack(ItemStack, int, net.minecraft.entity.EntityLivingBase)
+	 */
 	public String damage = "";
+	/**
+	 * The chance (x in y represented as x:y) for the held item to be damaged.
+	 */
 	public String damageChance = "";
 
-	public boolean changesBlock() {
-		return !changeBlockId.isEmpty();
+	private InteractRecipeMatcher matcher = null;
+	private int damageInt = -1;
+
+	/**
+	 * Returns whether or not this recipe changes the target block.
+	 * 
+	 * @return Whether or not this recipe changes the target block.
+	 */
+	public boolean changesTargetBlock() {
+		return !replacementBlockId.isEmpty();
 	}
 
-	public IBlockState getIntoBlock() {
-		String[] splitIntoBlockId = changeBlockId.split(":");
-		return Block.getBlockFromName(splitIntoBlockId[0] + ":" + splitIntoBlockId[1])
-				.getStateFromMeta(Integer.parseInt(splitIntoBlockId[2]));
-	}
-
-	public boolean matches(String targetBlock, String handItem) {
-		return this.targetBlockId.equals(targetBlock) && itemsMatch(handItemId, handItem);
-	}
-
-	public boolean rollFor(String chance) {
-		String[] splitChance = chance.split(":");
-		return RandUtil.rollSuccess(Integer.parseInt(splitChance[1]), Integer.parseInt(splitChance[0]) + 1);
-	}
-
-	public boolean rollForChangeBlock() {
-		return changeChance.isEmpty() || rollFor(changeChance);
-	}
-
+	/**
+	 * Returns whether or not this recipe drops an item.
+	 * 
+	 * @return Whether or not this recipe drops an item.
+	 */
 	public boolean dropsItem() {
 		return !dropItemId.isEmpty();
 	}
 
+	/**
+	 * Returns whether or not this recipe damages the held item.
+	 * 
+	 * @return Whether or not this recipe damages the held item.
+	 */
+	public boolean damagesHeldItem() {
+		return !damage.isEmpty();
+	}
+
+	/**
+	 * Rolls to determine whether a particular execution of a recipe changes the
+	 * block.
+	 * 
+	 * @return Whether a particular execution of a recipe changes the block.
+	 */
+	public boolean rollForChangeBlock() {
+		return replacementChance.isEmpty() || rollFor(replacementChance);
+	}
+
+	/**
+	 * Rolls to determine whether a particular execution of a recipe drops an
+	 * item.
+	 * 
+	 * @return Whether a particular execution of a recipe drops an item.
+	 */
 	public boolean rollForDropItem() {
 		return dropChance.isEmpty() || rollFor(dropChance);
 	}
 
-	public boolean itemsMatch(String itemId1, String itemId2) {
-		if (createItemStackFrom(itemId1).isItemStackDamageable()) {
-			String[] split1 = itemId1.split(":");
-			String[] split2 = itemId2.split(":");
-			return split1[0].equals(split2[0]) && split1[1].equals(split2[1]);
-		} else {
-			return itemId1.equals(itemId2);
-		}
-	}
-
-	public ItemStack createItemStackFrom(String itemId) {
-		String[] splitDropItemId = itemId.split(":");
-		ItemStack newItemStack = new ItemStack(Item.getByNameOrId(splitDropItemId[0] + ":" + splitDropItemId[1]));
-		newItemStack.setItemDamage(Integer.parseInt(splitDropItemId[2]));
-		return newItemStack;
-	}
-
-	public ItemStack createDrop() {
-		ItemStack dropped = createItemStackFrom(dropItemId);
-		return dropped;
-	}
-
-	public boolean damagesItem() {
-		return !damage.isEmpty();
-	}
-
+	/**
+	 * Rolls to determine whether a particular execution of a recipe damages the
+	 * held item.
+	 * 
+	 * @return Whether a particular execution of a recipe damages the held item.
+	 */
 	public boolean rollForDamageItem() {
 		return damageChance.isEmpty() || rollFor(damageChance);
 	}
 
+	/**
+	 * Given a valid string denoting x in y chances ("x:y"), this rolls a
+	 * theoretical dice with y sides and returns true if the rolled value is
+	 * less than x.
+	 * 
+	 * @param chance
+	 *            A string denoting x:y chances.
+	 * @return Whether the rolled value (up to y) is lower than x.
+	 */
+	private boolean rollFor(String chance) {
+		String[] splitChance = chance.split(":");
+		return RandUtil.rollSuccess(Integer.parseInt(splitChance[1]), Integer.parseInt(splitChance[0]) + 1);
+	}
+
+	/**
+	 * Turns the change block ID into a block state.
+	 * 
+	 * @return A block state for the change block.
+	 */
+	public IBlockState getChangeBlockState() {
+		return IdUtil.getBlockStateFrom(replacementBlockId);
+	}
+
+	/**
+	 * Turns the drop item ID into an item stack.
+	 * 
+	 * @return An item stack for the drop item.
+	 */
+	public ItemStack createDrop() {
+		ItemStack dropped = IdUtil.createItemStackFrom(dropItemId);
+		return dropped;
+	}
+
+	/**
+	 * Turns the damage string into an integer. Caches the result after the
+	 * first use.
+	 * 
+	 * @return The amount of damage this recipe deals.
+	 */
 	public int getDamage() {
-		return Integer.parseInt(damage);
+		if (damageInt == -1) {
+			damageInt = Integer.parseInt(damage);
+		}
+		return damageInt;
+	}
+
+	/**
+	 * Returns a matcher for this recipe for the purposes of matching it with
+	 * another. Caches the result after the first use.
+	 * 
+	 * @return A matcher for this recipe.
+	 */
+	public InteractRecipeMatcher getMatcher() {
+		if (matcher == null) {
+			matcher = new InteractRecipeMatcher(targetBlockId, heldItemId);
+		}
+		return matcher;
 	}
 }

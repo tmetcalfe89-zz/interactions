@@ -1,7 +1,5 @@
 package us.timinc.interactions.util;
 
-import us.timinc.interactions.Interactions;
-
 /**
  * A util class for generating random numbers.
  * 
@@ -44,6 +42,6 @@ public class RandUtil {
 	 */
 	public static int roll(int min, int max) {
 		int range = max - min + 1;
-		return (int) (int) (Math.random() * range) + min;
+		return (int) (Math.random() * range) + min;
 	}
 }

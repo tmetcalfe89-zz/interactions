@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
@@ -20,14 +20,15 @@ import us.timinc.interactions.event.InteractRecipeMatcher;
  *
  */
 public class InteractRecipes {
-	private HashMap<String, ArrayList<InteractRecipe>> recipes;
+	// private HashMap<String, ArrayList<InteractRecipe>> recipes;
+	private ArrayList<InteractRecipe> recipes;
 	private Gson gson;
 
 	/**
 	 * Creates a new instance.
 	 */
 	public InteractRecipes() {
-		this.recipes = new HashMap<>();
+		this.recipes = new ArrayList<>();
 		this.gson = new Gson();
 		loadRecipes();
 	}
@@ -38,11 +39,8 @@ public class InteractRecipes {
 	 * @param recipe
 	 *            The recipe to add.
 	 */
-	private void addRecipe(InteractRecipe recipe) {
-		if (!recipes.containsKey(recipe.targetBlockId)) {
-			recipes.put(recipe.targetBlockId, new ArrayList<InteractRecipe>());
-		}
-		recipes.get(recipe.targetBlockId).add(recipe);
+	private void add(InteractRecipe recipe) {
+		recipes.add(recipe);
 	}
 
 	/**
@@ -60,7 +58,7 @@ public class InteractRecipes {
 	private void addRecipesFrom(File file) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
 		InteractRecipe[] newRecipes = gson.fromJson(new FileReader(file), InteractRecipe[].class);
 		for (int i = 0; i < newRecipes.length; i++) {
-			addRecipe(newRecipes[i]);
+			add(newRecipes[i]);
 		}
 	}
 
@@ -83,26 +81,18 @@ public class InteractRecipes {
 	}
 
 	/**
-	 * Finds the first matching recipe for the given matcher in the recipes.
+	 * Finds all matching recipes for the given matcher in the recipes.
 	 * 
 	 * @param matcher
 	 *            The given matcher.
 	 * @return The first matching recipe.
 	 */
-	public InteractRecipe findMatch(InteractRecipeMatcher matcher) {
-		InteractRecipe match = null;
-		if (recipes.containsKey(matcher.targetBlockId)) {
-			ArrayList<InteractRecipe> possibleMatches = recipes.get(matcher.targetBlockId);
+	public ArrayList<InteractRecipe> findMatches(InteractRecipeMatcher matcher) {
+		return (ArrayList<InteractRecipe>) recipes.stream().filter(r -> r.getMatcher().matches(matcher))
+				.collect(Collectors.toList());
+	}
 
-			int i = 0;
-			while (match == null && i < possibleMatches.size()) {
-				InteractRecipe testRecipe = possibleMatches.get(i);
-				if (matcher.matches(testRecipe.getMatcher())) {
-					match = testRecipe;
-				}
-				i++;
-			}
-		}
-		return match;
+	public int getRecipeCount() {
+		return recipes.size();
 	}
 }

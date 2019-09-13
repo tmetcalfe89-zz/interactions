@@ -48,7 +48,8 @@ public class InteractRecipe {
 	/**
 	 * The damage to be dealt to the held item.
 	 * 
-	 * @see us.timinc.interactions.util.MinecraftUtil#damageItemStack(ItemStack, int, net.minecraft.entity.EntityLivingBase)
+	 * @see us.timinc.interactions.util.MinecraftUtil#damageItemStack(ItemStack,
+	 *      int, net.minecraft.entity.EntityLivingBase)
 	 */
 	public String damage = "";
 	/**
@@ -156,6 +157,9 @@ public class InteractRecipe {
 	 * @return The amount of damage this recipe deals.
 	 */
 	public int getDamage() {
+		if (!this.damagesHeldItem()) {
+			return 0;
+		}
 		if (damageInt == -1) {
 			damageInt = Integer.parseInt(damage);
 		}

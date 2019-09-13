@@ -7,6 +7,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import us.timinc.interactions.command.CommandInteract;
 import us.timinc.interactions.event.InteractionHandler;
 
 /**
@@ -36,7 +38,7 @@ public class Interactions {
 	@Mod.Instance(Interactions.MODID)
 	public static Interactions instance;
 
-	private InteractionHandler interactionHandler;
+	public InteractionHandler interactionHandler;
 
 	/**
 	 * The logger for the mod. Output stuff here, not to System.
@@ -65,5 +67,10 @@ public class Interactions {
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
 		MinecraftForge.EVENT_BUS.register(interactionHandler);
+	}
+
+	@EventHandler
+	public void serverLoad(FMLServerStartingEvent event) {
+		event.registerServerCommand(new CommandInteract());
 	}
 }

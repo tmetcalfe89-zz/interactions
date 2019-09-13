@@ -1,9 +1,11 @@
 package us.timinc.interactions.util;
 
+import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 
 /**
@@ -46,5 +48,17 @@ public class MinecraftUtil {
 	 */
 	public static EntityItem createEntityItem(World world, BlockPos position, ItemStack itemStack) {
 		return new EntityItem(world, position.getX(), position.getY(), position.getZ(), itemStack);
+	}
+
+	/**
+	 * Convenience message for sending a chat message to a sender.
+	 * 
+	 * @param sender
+	 *            The sender.
+	 * @param message
+	 *            The message.
+	 */
+	public static void sayTo(ICommandSender sender, String message) {
+		sender.sendMessage(new TextComponentString(message));
 	}
 }

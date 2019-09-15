@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import us.timinc.interactions.Interactions;
 import us.timinc.interactions.recipe.InteractRecipe;
 import us.timinc.interactions.recipe.InteractRecipes;
 import us.timinc.interactions.util.MinecraftUtil;
@@ -47,9 +47,6 @@ public class InteractionHandler {
 	 */
 	@SubscribeEvent
 	public void onInteraction(PlayerInteractEvent.RightClickBlock event) {
-		if (event.getWorld().isRemote)
-			return;
-
 		if (!event.getEntityPlayer().canPlayerEdit(event.getPos(), event.getFace(),
 				event.getEntityPlayer().getHeldItem(event.getHand())))
 			return;
@@ -83,6 +80,22 @@ public class InteractionHandler {
 	 *            The event context.
 	 */
 	private void processInteraction(InteractRecipe recipe, RightClickBlock event) {
+		if (event.getWorld().isRemote) {
+			processInteractionClient(recipe, event);
+		} else {
+			processInteractionServer(recipe, event);
+		}
+	}
+
+	/**
+	 * Process an interaction recipe given an event context on the server.
+	 * 
+	 * @param recipe
+	 *            The interaction recipe to process.
+	 * @param event
+	 *            The event context.
+	 */
+	private void processInteractionServer(InteractRecipe recipe, RightClickBlock event) {
 		World world = event.getWorld();
 		BlockPos targetPosition = event.getPos();
 		EntityPlayer player = event.getEntityPlayer();
@@ -106,6 +119,30 @@ public class InteractionHandler {
 		// successful.
 		if (recipe.damagesHeldItem() && recipe.rollForDamageItem()) {
 			MinecraftUtil.damageItemStack(heldItem, recipe.getDamage(), player);
+		}
+	}
+
+	/**
+	 * Process an interaction recipe given an event context on the client.
+	 * 
+	 * @param recipe
+	 *            The interaction recipe to process.
+	 * @param event
+	 *            The event context.
+	 */
+	private void processInteractionClient(InteractRecipe recipe, RightClickBlock event) {
+		World world = event.getWorld();
+		BlockPos targetPosition = event.getPos();
+
+		// If the recipe spaws particles, spawn them.
+		if (recipe.spawnsParticles()) {
+			int count = recipe.rollForParticleCount();
+			for (int i = 0; i <= count; i++) {
+				world.spawnParticle(EnumParticleTypes.getByName(recipe.getParticleName()),
+						(double) targetPosition.getX() + Math.random(), (double) targetPosition.getY() + Math.random(),
+						(double) targetPosition.getZ() + Math.random(), (float) Math.random() * 0.02D,
+						(float) Math.random() * 0.02D, (float) Math.random() * 0.02D);
+			}
 		}
 	}
 }

@@ -56,6 +56,14 @@ public class InteractRecipe {
 	 * The chance (x in y represented as x:y) for the held item to be damaged.
 	 */
 	public String damageChance = "";
+	/**
+	 * The name of the particle to be emitted.
+	 */
+	public String particleType = "";
+	/**
+	 * 
+	 */
+	public String particleCount = "";
 
 	private InteractRecipeMatcher matcher = null;
 	private int damageInt = -1;
@@ -177,5 +185,21 @@ public class InteractRecipe {
 			matcher = new InteractRecipeMatcher(targetBlockId, heldItemId);
 		}
 		return matcher;
+	}
+
+	public boolean spawnsParticles() {
+		return !particleType.isEmpty();
+	}
+
+	public int rollForParticleCount() {
+		if (!particleCount.contains(":"))
+			return Integer.parseInt(particleCount);
+
+		String[] splitCount = particleCount.split(":");
+		return RandUtil.roll(Integer.parseInt(splitCount[0]), Integer.parseInt(splitCount[1]));
+	}
+
+	public String getParticleName() {
+		return particleType;
 	}
 }

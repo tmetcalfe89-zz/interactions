@@ -15,7 +15,9 @@ It adds a folder in the Minecraft directory called "interactions". Create a JSON
     "dropItem": "<namespace>:<item>:<metadata>",          // If this interaction drops an item, it drops this. (optional)
     "dropChance": "<x>:<y>",                              // If this interaction drops an item, it has x in y chances to do so. (optional)
     "damage": "<x>",                                      // If this interaction damages the hand item, it does this much damage. (optional)
-    "damageChance": "<x>:<y>"                             // If this interaction damages the hand item, it has x in y chances to do so. (optional)
+    "damageChance": "<x>:<y>"                             // If this interaction damages the hand item, it has x in y chances to do so. (optional),
+    "particleType": "<particletype>"                      // If this interaction emits particles, it emits these particles. (optional),
+    "damageChance": "<x>:<y>"                             // If this interaction emits particles, it emits between x and y (y can be left out for an exact amount). (optional)
   }
 ]
 
@@ -33,7 +35,6 @@ Here's an example that turns dirt into coarse dirt when a player interacts with 
     "replacementBlock": "minecraft:dirt:1"
   }
 ]
-
 ```
 
 Here's an example that drops a diamond from diamond ore and turns the ore into stone when a player interacts with it with a diamond pickaxe in their hand. The pickaxe takes 1 damage.
@@ -46,7 +47,20 @@ Here's an example that drops a diamond from diamond ore and turns the ore into s
     "replacementBlock": "minecraft:stone:0"
   }
 ]
+```
 
+Here's the above example, but with (lots of) particles.
+Note: Using bonemeal on a crop or tree emits 15 happyVillager particles.
+```
+[
+  {
+    "targetBlock": "minecraft:diamond_ore:0",
+    "heldItem": "minecraft:diamond_pickaxe:0",
+    "replacementBlock": "minecraft:stone:0",
+    "particleType": "happyVillager",
+    "particleCount": "30:60"
+  }
+]
 ```
 
 # Pros

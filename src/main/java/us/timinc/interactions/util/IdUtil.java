@@ -41,11 +41,13 @@ public class IdUtil {
 	 * 
 	 * @param itemId
 	 *            The item ID.
-	 * @return The item stack. Has a quantity of 1.
+	 * @param count
+	 *            The number of items.
+	 * @return The item stack.
 	 */
-	public static ItemStack createItemStackFrom(String itemId) {
+	public static ItemStack createItemStackFrom(String itemId, int count) {
 		String[] splitDropItemId = itemId.split(":");
-		ItemStack newItemStack = new ItemStack(Item.getByNameOrId(splitDropItemId[0] + ":" + splitDropItemId[1]));
+		ItemStack newItemStack = new ItemStack(Item.getByNameOrId(splitDropItemId[0] + ":" + splitDropItemId[1]), count);
 		newItemStack.setItemDamage(Integer.parseInt(splitDropItemId[2]));
 		return newItemStack;
 	}

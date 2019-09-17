@@ -72,7 +72,7 @@ public class InteractRecipeMatcher {
 	 * @return Whether the two item IDs match.
 	 */
 	public boolean itemIdsMatch(String itemId1, String itemId2) {
-		if (IdUtil.createItemStackFrom(itemId1).isItemStackDamageable()) {
+		if (IdUtil.createItemStackFrom(itemId1, 1).isItemStackDamageable()) {
 			String[] split1 = itemId1.split(":");
 			String[] split2 = itemId2.split(":");
 			return split1[0].equals(split2[0]) && split1[1].equals(split2[1]);

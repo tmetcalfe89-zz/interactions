@@ -14,10 +14,11 @@ It adds a folder in the Minecraft directory called "interactions". Create a JSON
     "replacementChance": "<x>:<y>",                       // If this interaction replaces the target block, it has x in y chances to do so. (optional)
     "dropItem": "<namespace>:<item>:<metadata>",          // If this interaction drops an item, it drops this. (optional)
     "dropChance": "<x>:<y>",                              // If this interaction drops an item, it has x in y chances to do so. (optional)
+    "dropCount": "<x>:<y>",                               // If this interactions drops an item, it drops between x and y (y can be left out for an exact amount). (optional)
     "damage": "<x>",                                      // If this interaction damages the hand item, it does this much damage. (optional)
     "damageChance": "<x>:<y>"                             // If this interaction damages the hand item, it has x in y chances to do so. (optional),
     "particleType": "<particletype>"                      // If this interaction emits particles, it emits these particles. (optional),
-    "particleCount": "<x>:<y>"                            // If this interaction emits particles, it emits between x and y (y can be left out for an exact amount). (optional, but required if particleType exists)
+    "particleCount": "<x>:<y>"                            // If this interaction emits particles, it emits between x and y (y can be left out for an exact amount). (optional)
   }
 ]
 
@@ -43,8 +44,10 @@ Here's an example that drops a diamond from diamond ore and turns the ore into s
 [
   {
     "targetBlock": "minecraft:diamond_ore:0",
+    "dropItem": "minecraft:diamond:0",
     "heldItem": "minecraft:diamond_pickaxe:0",
-    "replacementBlock": "minecraft:stone:0"
+    "replacementBlock": "minecraft:stone:0",
+    "damage": "1"
   }
 ]
 ```
@@ -55,8 +58,10 @@ Note: Using bonemeal on a crop or tree emits 15 happyVillager particles.
 [
   {
     "targetBlock": "minecraft:diamond_ore:0",
+    "dropItem": "minecraft:diamond:0",
     "heldItem": "minecraft:diamond_pickaxe:0",
     "replacementBlock": "minecraft:stone:0",
+    "damage": "1"
     "particleType": "happyVillager",
     "particleCount": "30:60"
   }

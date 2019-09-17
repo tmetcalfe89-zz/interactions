@@ -37,8 +37,6 @@ slime
 heart
 barrier
 iconcrack
-blockcrack
-blockdust
 droplet
 take
 mobappearance

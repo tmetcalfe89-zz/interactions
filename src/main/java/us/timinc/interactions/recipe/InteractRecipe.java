@@ -46,6 +46,10 @@ public class InteractRecipe {
 	 */
 	public String dropChance = "";
 	/**
+	 * The count (from x to y represented as x:y) of items to be dropped.
+	 */
+	public String dropCount = "1";
+	/**
 	 * The damage to be dealt to the held item.
 	 * 
 	 * @see us.timinc.interactions.util.MinecraftUtil#damageItemStack(ItemStack,
@@ -61,9 +65,9 @@ public class InteractRecipe {
 	 */
 	public String particleType = "";
 	/**
-	 * 
+	 * The number of particles (from x to y represented as x:y) to be emitted.
 	 */
-	public String particleCount = "";
+	public String particleCount = "15";
 
 	private InteractRecipeMatcher matcher = null;
 	private int damageInt = -1;
@@ -154,8 +158,16 @@ public class InteractRecipe {
 	 * @return An item stack for the drop item.
 	 */
 	public ItemStack createDrop() {
-		ItemStack dropped = IdUtil.createItemStackFrom(dropItemId);
+		ItemStack dropped = IdUtil.createItemStackFrom(dropItemId, rollForDropCount());
 		return dropped;
+	}
+
+	public int rollForDropCount() {
+		if (!dropCount.contains(":"))
+			return Integer.parseInt(dropCount);
+
+		String[] splitCount = dropCount.split(":");
+		return RandUtil.roll(Integer.parseInt(splitCount[0]), Integer.parseInt(splitCount[1]));
 	}
 
 	/**

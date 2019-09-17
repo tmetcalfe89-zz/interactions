@@ -57,7 +57,7 @@ public class InteractRecipe {
 	 */
 	public String damage = "";
 	/**
-	 * The chance (x in y represented as x:y) for the held item to be damaged.
+	 * The chance (expressed as a double between 0 and 1) for the held item to be damaged.
 	 */
 	public String damageChance = "";
 	/**

@@ -18,8 +18,8 @@ It adds a folder in the Minecraft directory called "interactions". Create a JSON
     "dropCount": "<x>:<y>",                               // If this interactions drops an item, it drops between x and y (y can be left out for an exact amount). (optional)
     "damage": "<x>",                                      // If this interaction damages the hand item, it does this much damage. (optional)
     "damageOnlyOnSuccess": "<true/false>",                // If this interaction damages the hand item, setting this to true only allows the damage if block replacement was successful. (optional)
-    "damageChance": "<x>:<y>",                             // If this interaction damages the hand item, it has x in y chances to do so. (optional),
-    "particleType": "<particletype>",                      // If this interaction emits particles, it emits these particles. (optional),
+    "damageChance": "<x>:<y>",                            // If this interaction damages the hand item, it has x in y chances to do so. (optional),
+    "particleType": "<particletype>",                     // If this interaction emits particles, it emits these particles. (optional),
     "particleCount": "<x>:<y>"                            // If this interaction emits particles, it emits between x and y (y can be left out for an exact amount). (optional)
   }
 ]

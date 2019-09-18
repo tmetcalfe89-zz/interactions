@@ -13,11 +13,11 @@ It adds a folder in the Minecraft directory called "interactions". Create a JSON
     "replacementBlock": "<namespace>:<block>:<metadata>", // If this interaction replaces the target block, it replaces with this. (optional)
     "replacementChance": "<x>:<y>",                       // If this interaction replaces the target block, it has x in y chances to do so. (optional)
     "dropItem": "<namespace>:<item>:<metadata>",          // If this interaction drops an item, it drops this. (optional)
-    "dropOnlyOnSuccess": "<true/false>"                   // If this interaction drops an item, setting this to true only allows the drop if block replacement was successful. (optional)
+    "dropOnlyOnSuccess": "<true/false>",                  // If this interaction drops an item, setting this to true only allows the drop if block replacement was successful. (optional)
     "dropChance": "<x>:<y>",                              // If this interaction drops an item, it has x in y chances to do so. (optional)
     "dropCount": "<x>:<y>",                               // If this interactions drops an item, it drops between x and y (y can be left out for an exact amount). (optional)
     "damage": "<x>",                                      // If this interaction damages the hand item, it does this much damage. (optional)
-    "damageOnlyOnSuccess": "<true/false>"                 // If this interaction damages the hand item, setting this to true only allows the damage if block replacement was successful. (optional)
+    "damageOnlyOnSuccess": "<true/false>",                // If this interaction damages the hand item, setting this to true only allows the damage if block replacement was successful. (optional)
     "damageChance": "<x>:<y>"                             // If this interaction damages the hand item, it has x in y chances to do so. (optional),
     "particleType": "<particletype>"                      // If this interaction emits particles, it emits these particles. (optional),
     "particleCount": "<x>:<y>"                            // If this interaction emits particles, it emits between x and y (y can be left out for an exact amount). (optional)

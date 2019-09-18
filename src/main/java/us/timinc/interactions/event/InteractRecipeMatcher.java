@@ -58,26 +58,6 @@ public class InteractRecipeMatcher {
 	 * @return Whether the two match.
 	 */
 	public boolean matches(InteractRecipeMatcher other) {
-		return this.targetBlockId.equals(other.targetBlockId) && itemIdsMatch(heldItemId, other.heldItemId);
-	}
-
-	/**
-	 * Determines whether two item IDs match. Does not take meta into account if
-	 * the item stack is damageable.
-	 * 
-	 * @param itemId1
-	 *            The first item ID.
-	 * @param itemId2
-	 *            The second item ID.
-	 * @return Whether the two item IDs match.
-	 */
-	public boolean itemIdsMatch(String itemId1, String itemId2) {
-		if (IdUtil.createItemStackFrom(itemId1, 1).isItemStackDamageable()) {
-			String[] split1 = itemId1.split(":");
-			String[] split2 = itemId2.split(":");
-			return split1[0].equals(split2[0]) && split1[1].equals(split2[1]);
-		} else {
-			return itemId1.equals(itemId2);
-		}
+		return this.targetBlockId.equals(other.targetBlockId) && IdUtil.itemIdsMatch(heldItemId, other.heldItemId);
 	}
 }

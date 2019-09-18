@@ -47,7 +47,8 @@ public class IdUtil {
 	 */
 	public static ItemStack createItemStackFrom(String itemId, int count) {
 		String[] splitDropItemId = itemId.split(":");
-		ItemStack newItemStack = new ItemStack(Item.getByNameOrId(splitDropItemId[0] + ":" + splitDropItemId[1]), count);
+		ItemStack newItemStack = new ItemStack(Item.getByNameOrId(splitDropItemId[0] + ":" + splitDropItemId[1]),
+				count);
 		newItemStack.setItemDamage(Integer.parseInt(splitDropItemId[2]));
 		return newItemStack;
 	}
@@ -63,5 +64,25 @@ public class IdUtil {
 		String[] splitIntoBlockId = blockId.split(":");
 		return Block.getBlockFromName(splitIntoBlockId[0] + ":" + splitIntoBlockId[1])
 				.getStateFromMeta(Integer.parseInt(splitIntoBlockId[2]));
+	}
+
+	/**
+	 * Determines whether two item IDs match. Does not take meta into account if
+	 * the item stack is damageable.
+	 * 
+	 * @param itemId1
+	 *            The first item ID.
+	 * @param itemId2
+	 *            The second item ID.
+	 * @return Whether the two item IDs match.
+	 */
+	public static boolean itemIdsMatch(String itemId1, String itemId2) {
+		if (createItemStackFrom(itemId1, 1).isItemStackDamageable()) {
+			String[] split1 = itemId1.split(":");
+			String[] split2 = itemId2.split(":");
+			return split1[0].equals(split2[0]) && split1[1].equals(split2[1]);
+		} else {
+			return itemId1.equals(itemId2);
+		}
 	}
 }

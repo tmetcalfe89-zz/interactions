@@ -101,15 +101,18 @@ public class InteractionHandler {
 		EntityPlayer player = event.getEntityPlayer();
 		ItemStack heldItem = player.getHeldItem(event.getHand());
 
+		// Roll for success.
+		boolean success = recipe.rollForChangeBlock();
+
 		// If the recipe changes the target block, roll for it, and do it if
 		// successful.
-		if (recipe.changesTargetBlock() && recipe.rollForChangeBlock()) {
+		if (recipe.changesTargetBlock() && success) {
 			world.setBlockState(targetPosition, recipe.getChangeBlockState());
 		}
 
 		// If the recipe drops an item from the target block, roll for it,
 		// and do it if successful.
-		if (recipe.dropsItem() && recipe.rollForDropItem()) {
+		if (recipe.dropsItem(success) && recipe.rollForDropItem()) {
 			EntityItem itemDropEntity = MinecraftUtil.createEntityItem(world, targetPosition, recipe.createDrop());
 
 			world.spawnEntity(itemDropEntity);
@@ -117,7 +120,7 @@ public class InteractionHandler {
 
 		// If the recipe damages the held item, roll for it, and do it if
 		// successful.
-		if (recipe.damagesHeldItem() && recipe.rollForDamageItem()) {
+		if (recipe.damagesHeldItem(success) && recipe.rollForDamageItem()) {
 			MinecraftUtil.damageItemStack(heldItem, recipe.getDamage(), player);
 		}
 	}

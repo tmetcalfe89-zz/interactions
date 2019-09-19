@@ -36,7 +36,6 @@ snowshovel
 slime
 heart
 barrier
-iconcrack
 droplet
 take
 mobappearance

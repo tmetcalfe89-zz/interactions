@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
@@ -13,6 +14,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBloc
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import us.timinc.interactions.recipe.InteractRecipe;
 import us.timinc.interactions.recipe.InteractRecipes;
+import us.timinc.interactions.util.IdUtil;
 import us.timinc.interactions.util.MinecraftUtil;
 
 /**
@@ -144,7 +146,10 @@ public class InteractionHandler {
 				world.spawnParticle(EnumParticleTypes.getByName(recipe.getParticleName()),
 						(double) targetPosition.getX() + Math.random(), (double) targetPosition.getY() + Math.random(),
 						(double) targetPosition.getZ() + Math.random(), (float) Math.random() * 0.02D,
-						(float) Math.random() * 0.02D, (float) Math.random() * 0.02D);
+						(float) Math.random() * 0.02D, (float) Math.random() * 0.02D,
+						recipe.getParticleParam().isEmpty() ? 0
+								: Item.getIdFromItem(
+										IdUtil.createItemStackFrom(recipe.getParticleParam(), 1).getItem()));
 			}
 		}
 	}

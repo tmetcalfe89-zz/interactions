@@ -47,3 +47,10 @@ sweepAttack
 fallingdust
 totem
 spit
+
+The following require a parameter in the form of <namespace>:<block/item>:<metadata> in order to function:
+iconcrack
+blockcrack
+blockdust
+
+For example: `iconcrack:minecraft:dirt:0`

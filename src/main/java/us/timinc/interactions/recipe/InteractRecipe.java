@@ -248,6 +248,15 @@ public class InteractRecipe {
 	}
 
 	public String getParticleName() {
-		return particleType;
+		String[] splitParticleType = particleType.split(":");
+		return splitParticleType[0];
+	}
+
+	public String getParticleParam() {
+		String[] splitParticleType = particleType.split(":");
+		if (splitParticleType.length == 1) {
+			return "";
+		}
+		return (splitParticleType[1] + ":" + splitParticleType[2] + ":" + splitParticleType[3]);
 	}
 }

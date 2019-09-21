@@ -1,5 +1,7 @@
 package us.timinc.interactions.util;
 
+import java.util.regex.Pattern;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
@@ -84,5 +86,9 @@ public class IdUtil {
 		} else {
 			return itemId1.equals(itemId2);
 		}
+	}
+
+	public static boolean matches(String recipeObject, String gameObject) {
+		return Pattern.matches(recipeObject.replaceAll("\\*", ".*"), gameObject);
 	}
 }

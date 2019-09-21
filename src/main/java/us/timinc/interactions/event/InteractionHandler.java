@@ -53,7 +53,7 @@ public class InteractionHandler {
 				event.getEntityPlayer().getHeldItem(event.getHand())))
 			return;
 
-		checkForInteractions(event);
+		processMatchinInteractions(event);
 	}
 
 	/**
@@ -64,12 +64,9 @@ public class InteractionHandler {
 	 * @param event
 	 *            The interaction event.
 	 */
-	private void checkForInteractions(RightClickBlock event) {
-		// Create a matcher from the event to compare against existing recipes.
-		InteractRecipeMatcher eventMatcher = InteractRecipeMatcher.buildFromEvent(event);
-
+	private void processMatchinInteractions(RightClickBlock event) {
 		// Find any recipes that match the event and process them.
-		ArrayList<InteractRecipe> matches = interactRecipes.findMatches(eventMatcher);
+		ArrayList<InteractRecipe> matches = interactRecipes.findMatches(event);
 		matches.forEach(r -> processInteraction(r, event));
 	}
 

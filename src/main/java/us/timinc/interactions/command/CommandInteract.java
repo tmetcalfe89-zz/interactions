@@ -63,7 +63,9 @@ public class CommandInteract implements ICommand {
 	@Override
 	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args,
 			BlockPos targetPos) {
-		return null;
+		ArrayList<String> tabCompletions = new ArrayList<String>();
+		tabCompletions.add("reload");
+		return tabCompletions;
 	}
 
 	@Override

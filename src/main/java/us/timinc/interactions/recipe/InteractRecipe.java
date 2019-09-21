@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
-import us.timinc.interactions.event.InteractRecipeMatcher;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
 import us.timinc.interactions.util.IdUtil;
 import us.timinc.interactions.util.RandUtil;
 
@@ -79,7 +79,6 @@ public class InteractRecipe {
 	 */
 	public String particleCount = "15";
 
-	private InteractRecipeMatcher matcher = null;
 	private int damageInt = -1;
 
 	/**
@@ -222,19 +221,6 @@ public class InteractRecipe {
 		return damageInt;
 	}
 
-	/**
-	 * Returns a matcher for this recipe for the purposes of matching it with
-	 * another. Caches the result after the first use.
-	 * 
-	 * @return A matcher for this recipe.
-	 */
-	public InteractRecipeMatcher getMatcher() {
-		if (matcher == null) {
-			matcher = new InteractRecipeMatcher(targetBlockId, heldItemId);
-		}
-		return matcher;
-	}
-
 	public boolean spawnsParticles() {
 		return !particleType.isEmpty();
 	}
@@ -258,5 +244,10 @@ public class InteractRecipe {
 			return "";
 		}
 		return (splitParticleType[1] + ":" + splitParticleType[2] + ":" + splitParticleType[3]);
+	}
+
+	public boolean matches(RightClickBlock event) {
+		return IdUtil.matches(this.heldItemId, IdUtil.getItemId(event.getItemStack())) && IdUtil
+				.matches(this.targetBlockId, IdUtil.getBlockId(event.getWorld().getBlockState(event.getPos())));
 	}
 }

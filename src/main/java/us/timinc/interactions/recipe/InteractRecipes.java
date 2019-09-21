@@ -11,7 +11,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 
-import us.timinc.interactions.event.InteractRecipeMatcher;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
 
 /**
  * Holds the recipes as loaded from file.
@@ -80,19 +80,11 @@ public class InteractRecipes {
 		}
 	}
 
-	/**
-	 * Finds all matching recipes for the given matcher in the recipes.
-	 * 
-	 * @param matcher
-	 *            The given matcher.
-	 * @return The first matching recipe.
-	 */
-	public ArrayList<InteractRecipe> findMatches(InteractRecipeMatcher matcher) {
-		return (ArrayList<InteractRecipe>) recipes.stream().filter(r -> r.getMatcher().matches(matcher))
-				.collect(Collectors.toList());
-	}
-
 	public int getRecipeCount() {
 		return recipes.size();
+	}
+
+	public ArrayList<InteractRecipe> findMatches(RightClickBlock event) {
+		return (ArrayList<InteractRecipe>) recipes.stream().filter(r -> r.matches(event)).collect(Collectors.toList());
 	}
 }

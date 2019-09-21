@@ -40,14 +40,14 @@ Here's an example that turns dirt into coarse dirt when a player interacts with 
 ]
 ```
 
-Here's an example that drops a diamond from diamond ore and turns the ore into stone when a player interacts with it with a diamond pickaxe in their hand. The pickaxe takes 1 damage.
+Here's an example that drops a diamond from diamond ore and turns the ore into stone when a player interacts with it with a pickaxe in their hand. The pickaxe takes 1 damage.
 
 ```
 [
   {
     "targetBlock": "minecraft:diamond_ore:0",
     "dropItem": "minecraft:diamond:0",
-    "heldItem": "minecraft:diamond_pickaxe:0",
+    "heldItem": "minecraft:*_pickaxe:0",
     "replacementBlock": "minecraft:stone:0",
     "damage": "1"
   }

@@ -79,8 +79,6 @@ public class InteractRecipe {
 	 */
 	public String particleCount = "15";
 
-	private int damageInt = -1;
-
 	/**
 	 * Returns whether or not this recipe changes the target block.
 	 * 
@@ -197,6 +195,11 @@ public class InteractRecipe {
 		return dropped;
 	}
 
+	/**
+	 * Rolls to determine how many of an item will be dropped.
+	 * 
+	 * @return How many of an item will be dropped.
+	 */
 	public int rollForDropCount() {
 		if (!dropCount.contains(":"))
 			return Integer.parseInt(dropCount);
@@ -215,16 +218,23 @@ public class InteractRecipe {
 		if (!this.damagesHeldItem(true)) {
 			return 0;
 		}
-		if (damageInt == -1) {
-			damageInt = Integer.parseInt(damage);
-		}
-		return damageInt;
+		return Integer.parseInt(damage);
 	}
 
+	/**
+	 * Returns whether or not this recipe spawns particles.
+	 * 
+	 * @return Whether or not this recipe spawns particles.
+	 */
 	public boolean spawnsParticles() {
 		return !particleType.isEmpty();
 	}
 
+	/**
+	 * Rolls to determine how many particles will be spawned.
+	 * 
+	 * @return How many particles will be spawned.
+	 */
 	public int rollForParticleCount() {
 		if (!particleCount.contains(":"))
 			return Integer.parseInt(particleCount);
@@ -233,11 +243,21 @@ public class InteractRecipe {
 		return RandUtil.roll(Integer.parseInt(splitCount[0]), Integer.parseInt(splitCount[1]));
 	}
 
+	/**
+	 * Gets the name of the particle to spawn.
+	 * 
+	 * @return The name of the particle to spawn.
+	 */
 	public String getParticleName() {
 		String[] splitParticleType = particleType.split(":");
 		return splitParticleType[0];
 	}
 
+	/**
+	 * Gets the parameters needed to spawn this particle.
+	 * 
+	 * @return The parameters needed to spawn this particle.
+	 */
 	public String getParticleParam() {
 		String[] splitParticleType = particleType.split(":");
 		if (splitParticleType.length == 1) {
@@ -246,6 +266,15 @@ public class InteractRecipe {
 		return (splitParticleType[1] + ":" + splitParticleType[2] + ":" + splitParticleType[3]);
 	}
 
+	/**
+	 * Returns whether or not the given event matches this recipe. Compares the
+	 * held item and target blocks.
+	 * 
+	 * @param event
+	 *            The given event.
+	 * 
+	 * @return Whether or not the given event matches this recipe.
+	 */
 	public boolean matches(RightClickBlock event) {
 		return IdUtil.matches(this.heldItemId, IdUtil.getItemId(event.getItemStack())) && IdUtil
 				.matches(this.targetBlockId, IdUtil.getBlockId(event.getWorld().getBlockState(event.getPos())));

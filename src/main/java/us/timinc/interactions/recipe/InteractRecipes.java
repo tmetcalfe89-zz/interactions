@@ -20,8 +20,14 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBloc
  *
  */
 public class InteractRecipes {
-	// private HashMap<String, ArrayList<InteractRecipe>> recipes;
+	/**
+	 * Holds the recipes.
+	 */
 	private ArrayList<InteractRecipe> recipes;
+	/**
+	 * I don't see why this class can't just have static members throughout.
+	 * *grumble*
+	 */
 	private Gson gson;
 
 	/**
@@ -80,10 +86,23 @@ public class InteractRecipes {
 		}
 	}
 
+	/**
+	 * Gets the number of registered recipes.
+	 * 
+	 * @return The number of registered recipes.
+	 */
 	public int getRecipeCount() {
 		return recipes.size();
 	}
 
+	/**
+	 * Finds recipes matching the given event.
+	 * 
+	 * @param event
+	 *            The event to match.
+	 * 
+	 * @return The list of recipes matching the given event.
+	 */
 	public ArrayList<InteractRecipe> findMatches(RightClickBlock event) {
 		return (ArrayList<InteractRecipe>) recipes.stream().filter(r -> r.matches(event)).collect(Collectors.toList());
 	}

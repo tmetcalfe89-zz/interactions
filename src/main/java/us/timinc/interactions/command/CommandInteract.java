@@ -11,14 +11,33 @@ import net.minecraft.util.math.BlockPos;
 import us.timinc.interactions.Interactions;
 import us.timinc.interactions.util.MinecraftUtil;
 
+/**
+ * Holds the commands for this mod.
+ * 
+ * @author Tim
+ *
+ */
 public class CommandInteract implements ICommand {
 
+	/**
+	 * Holds the aliases for the root command.
+	 */
 	private final ArrayList aliases;
+	/**
+	 * Holds the tab complets.
+	 */
+	private final ArrayList tabCompletes;
 
+	/**
+	 * Creates a new instance of this class.
+	 */
 	public CommandInteract() {
 		aliases = new ArrayList();
 		aliases.add("ia");
 		aliases.add("inter");
+
+		tabCompletes = new ArrayList();
+		tabCompletes.add("reload");
 	}
 
 	@Override
@@ -63,9 +82,7 @@ public class CommandInteract implements ICommand {
 	@Override
 	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args,
 			BlockPos targetPos) {
-		ArrayList<String> tabCompletions = new ArrayList<String>();
-		tabCompletions.add("reload");
-		return tabCompletions;
+		return tabCompletes;
 	}
 
 	@Override

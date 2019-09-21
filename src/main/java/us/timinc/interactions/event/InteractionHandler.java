@@ -24,6 +24,9 @@ import us.timinc.interactions.util.MinecraftUtil;
  *
  */
 public class InteractionHandler {
+	/**
+	 * The recipes this handler handles.
+	 */
 	public InteractRecipes interactRecipes;
 
 	/**

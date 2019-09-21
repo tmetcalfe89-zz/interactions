@@ -88,6 +88,17 @@ public class IdUtil {
 		}
 	}
 
+	/**
+	 * Determines whether or not the game object id matches the recipe object
+	 * template.
+	 * 
+	 * @param recipeObject
+	 *            The recipe template.
+	 * @param gameObject
+	 *            The game object id.
+	 * 
+	 * @return Whether or not they match.
+	 */
 	public static boolean matches(String recipeObject, String gameObject) {
 		return Pattern.matches(recipeObject.replaceAll("\\*", ".*"), gameObject);
 	}

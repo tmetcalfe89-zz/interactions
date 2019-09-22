@@ -102,4 +102,23 @@ public class IdUtil {
 	public static boolean matches(String recipeObject, String gameObject) {
 		return Pattern.matches(recipeObject.replaceAll("\\*", ".*"), gameObject);
 	}
+
+	public enum IdType {
+		CHECK, OBJ
+	};
+
+	public static String fixMetadata(String metadata, IdType idType) {
+		String[] splitMetadata = metadata.split(":");
+		if (splitMetadata.length == 2) {
+			switch (idType) {
+			case CHECK:
+				return metadata + ":*";
+			case OBJ:
+				return metadata + ":0";
+			default:
+				return metadata;
+			}
+		}
+		return metadata;
+	}
 }

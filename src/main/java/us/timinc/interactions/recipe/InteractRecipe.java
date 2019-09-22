@@ -279,4 +279,17 @@ public class InteractRecipe {
 		return IdUtil.matches(this.heldItemId, IdUtil.getItemId(event.getItemStack())) && IdUtil
 				.matches(this.targetBlockId, IdUtil.getBlockId(event.getWorld().getBlockState(event.getPos())));
 	}
+
+	public void fixMetadata() {
+		targetBlockId = IdUtil.fixMetadata(targetBlockId, IdUtil.IdType.CHECK);
+		if (!heldItemId.isEmpty()) {
+			heldItemId = IdUtil.fixMetadata(heldItemId, IdUtil.IdType.CHECK);
+		}
+		if (!this.replacementBlockId.isEmpty()) {
+			replacementBlockId = IdUtil.fixMetadata(replacementBlockId, IdUtil.IdType.OBJ);
+		}
+		if (!this.dropItemId.isEmpty()) {
+			dropItemId = IdUtil.fixMetadata(dropItemId, IdUtil.IdType.OBJ);
+		}
+	}
 }

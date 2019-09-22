@@ -64,6 +64,7 @@ public class InteractRecipes {
 	private void addRecipesFrom(File file) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
 		InteractRecipe[] newRecipes = gson.fromJson(new FileReader(file), InteractRecipe[].class);
 		for (int i = 0; i < newRecipes.length; i++) {
+			newRecipes[i].fixMetadata();
 			add(newRecipes[i]);
 		}
 	}

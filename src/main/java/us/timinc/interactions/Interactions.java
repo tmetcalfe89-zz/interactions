@@ -30,7 +30,7 @@ public class Interactions {
 	/**
 	 * The version of the mod. I'm sure I won't forget to update this. Probably.
 	 */
-	public static final String VERSION = "1.0";
+	public static final String VERSION = "1.6.1";
 
 	/**
 	 * An instance of the mod. I forget why this is here.

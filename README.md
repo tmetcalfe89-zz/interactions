@@ -34,7 +34,7 @@ Here's an example that turns dirt into coarse dirt when a player interacts with 
 [
   {
     "targetBlock": "minecraft:dirt:0",
-    "heldItem": "minecraft:stick:1",
+    "heldItem": "minecraft:stick",
     "replacementBlock": "minecraft:dirt:1"
   }
 ]
@@ -45,10 +45,10 @@ Here's an example that drops a diamond from diamond ore and turns the ore into s
 ```
 [
   {
-    "targetBlock": "minecraft:diamond_ore:0",
-    "dropItem": "minecraft:diamond:0",
-    "heldItem": "minecraft:*_pickaxe:0",
-    "replacementBlock": "minecraft:stone:0",
+    "targetBlock": "minecraft:diamond_ore",
+    "dropItem": "minecraft:diamond",
+    "heldItem": "minecraft:*_pickaxe",
+    "replacementBlock": "minecraft:stone",
     "damage": "1"
   }
 ]
@@ -59,10 +59,10 @@ Note: Using bonemeal on a crop or tree emits 15 happyVillager particles.
 ```
 [
   {
-    "targetBlock": "minecraft:diamond_ore:0",
-    "dropItem": "minecraft:diamond:0",
-    "heldItem": "minecraft:diamond_pickaxe:0",
-    "replacementBlock": "minecraft:stone:0",
+    "targetBlock": "minecraft:diamond_ore",
+    "dropItem": "minecraft:diamond",
+    "heldItem": "minecraft:diamond_pickaxe",
+    "replacementBlock": "minecraft:stone",
     "damage": "1",
     "particleType": "happyVillager",
     "particleCount": "30:60"

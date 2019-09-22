@@ -81,8 +81,6 @@ Note: Using bonemeal on a crop or tree emits 15 happyVillager particles.
 
 * Doesn't hook in with other APIs.
 * Doesn't work with ore dictionaries.
-* Doesn't work with tool levels. For example, you can't have say an iron pickaxe is required, and then have it automatically know diamond works as well.
-* Damage is required for every item and block, even if it's 0.
 
 # Notes
 

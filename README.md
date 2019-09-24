@@ -70,17 +70,29 @@ Note: Using bonemeal on a crop or tree emits 15 happyVillager particles.
 ]
 ```
 
+Here's a goofy example showing off ore dictionary compatibility. Right-click a stone block with anything registered to the gemDiamond group and it'll turn into a diamond ore, consuming the item.
+```
+[
+  {
+    "targetBlock": "minecraft:stone",
+    "heldItem": "ore:gemDiamond",
+    "replacementBlock": "minecraft:diamond_ore",
+    "damage": "1"
+  }
+]
+```
+
 # Pros
 
 * Easy to use.
 * Damage works with both damageable items (in which case it damages the item) and undamageable items (in which case it consumes items in the stack).
 * Works with mod items and blocks.
 * Works with damage/metadata.
+* Works with ore dictionaries.
 
 # Cons
 
 * Doesn't hook in with other APIs.
-* Doesn't work with ore dictionaries.
 
 # Notes
 

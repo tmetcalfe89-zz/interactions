@@ -6,6 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 /**
  * A util class for turning game objects into ID strings.
@@ -100,7 +101,17 @@ public class IdUtil {
 	 * @return Whether or not they match.
 	 */
 	public static boolean matches(String recipeObject, String gameObject) {
-		return Pattern.matches(recipeObject.replaceAll("\\*", ".*"), gameObject);
+		String fixedRecipeObject = recipeObject.replaceAll("\\*", ".*");
+		if (!gameObject.equals("minecraft:air:0") && recipeObject.startsWith("ore:")) {
+			int[] x = OreDictionary.getOreIDs(IdUtil.createItemStackFrom(gameObject, 1));
+			for (int i : x) {
+				if (Pattern.matches(fixedRecipeObject, "ore:" + OreDictionary.getOreName(i) + ":0")) {
+					return true;
+				}
+			}
+			return false;
+		}
+		return Pattern.matches(fixedRecipeObject, gameObject);
 	}
 
 	public enum IdType {

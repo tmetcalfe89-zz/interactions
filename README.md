@@ -54,8 +54,8 @@ Here's an example that drops a diamond from diamond ore and turns the ore into s
 ]
 ```
 
-Here's the above example, but with (lots of) particles.
-Note: Using bonemeal on a crop or tree emits 15 happyVillager particles.
+Here's the above example, but with (lots of) cracking stone particles.
+Note: For reference, applying bonemeal creates 15 happyVillager particles.
 ```
 [
   {
@@ -64,7 +64,7 @@ Note: Using bonemeal on a crop or tree emits 15 happyVillager particles.
     "heldItem": "minecraft:diamond_pickaxe",
     "replacementBlock": "minecraft:stone",
     "damage": "1",
-    "particleType": "happyVillager",
+    "particleType": "iconcrack:minecraft:stone:0",
     "particleCount": "30:60"
   }
 ]

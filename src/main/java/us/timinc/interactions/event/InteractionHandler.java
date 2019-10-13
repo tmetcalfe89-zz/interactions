@@ -8,6 +8,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
@@ -16,6 +17,7 @@ import us.timinc.interactions.recipe.InteractRecipe;
 import us.timinc.interactions.recipe.InteractRecipes;
 import us.timinc.interactions.util.IdUtil;
 import us.timinc.interactions.util.MinecraftUtil;
+import us.timinc.interactions.util.RandUtil;
 
 /**
  * Implements the logic in recipes matching events.
@@ -143,14 +145,33 @@ public class InteractionHandler {
 		if (recipe.spawnsParticles()) {
 			int count = recipe.rollForParticleCount();
 			for (int i = 0; i <= count; i++) {
-				world.spawnParticle(EnumParticleTypes.getByName(recipe.getParticleName()),
-						(double) targetPosition.getX() + Math.random(), (double) targetPosition.getY() + Math.random(),
-						(double) targetPosition.getZ() + Math.random(), (float) Math.random() * 0.02D,
+				double[] particlePosition = getParticlePosition(targetPosition, "out");
+				world.spawnParticle(EnumParticleTypes.getByName(recipe.getParticleName()), particlePosition[0],
+						particlePosition[1], particlePosition[2], (float) Math.random() * 0.02D,
 						(float) Math.random() * 0.02D, (float) Math.random() * 0.02D,
 						recipe.getParticleParam().isEmpty() ? 0
 								: Item.getIdFromItem(
 										IdUtil.createItemStackFrom(recipe.getParticleParam(), 1).getItem()));
 			}
 		}
+	}
+
+	private double[] getParticlePosition(BlockPos targetPosition, String string) {
+		double[] retval = new double[3];
+		switch (string) {
+		case "in":
+			retval[0] = (double) targetPosition.getX() + Math.random();
+			retval[1] = (double) targetPosition.getY() + Math.random();
+			retval[2] = (double) targetPosition.getZ() + Math.random();
+			break;
+		case "out":
+			int side = RandUtil.roll(0, 2);
+			double[] sideFinder = { -0.1, 1.1 };
+			retval[0] = (double) targetPosition.getX() + (side == 0 ? sideFinder[RandUtil.roll(0, 1)] : Math.random());
+			retval[1] = (double) targetPosition.getY() + (side == 1 ? sideFinder[RandUtil.roll(0, 1)] : Math.random());
+			retval[2] = (double) targetPosition.getZ() + (side == 2 ? sideFinder[RandUtil.roll(0, 1)] : Math.random());
+			break;
+		}
+		return retval;
 	}
 }

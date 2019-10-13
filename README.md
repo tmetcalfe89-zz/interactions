@@ -20,6 +20,7 @@ It adds a folder in the Minecraft directory called "interactions". Create a JSON
     "damageOnlyOnSuccess": "<true/false>",                // If this interaction damages the hand item, setting this to true only allows the damage if block replacement was successful. (optional)
     "damageChance": "<x>:<y>",                            // If this interaction damages the hand item, it has x in y chances to do so. (optional),
     "particleType": "<particletype>:<parameter>",         // If this interaction emits particles, it emits these particles. (both parts optional),
+    "particleArea": "<in/out>",                           // If this interaction emits particles, it emits the particles here in reference to the target block. "in" emits the particles inside the block, "out" emits them just slightly outside. (optional, defaults to "in")
     "particleCount": "<x>:<y>"                            // If this interaction emits particles, it emits between x and y (y can be left out for an exact amount). (optional)
   }
 ]
@@ -54,7 +55,7 @@ Here's an example that drops a diamond from diamond ore and turns the ore into s
 ]
 ```
 
-Here's the above example, but with (lots of) cracking stone particles.
+Here's the above example, but with (lots of) cracking diamond ore particles.
 Note: For reference, applying bonemeal creates 15 happyVillager particles.
 ```
 [
@@ -64,7 +65,8 @@ Note: For reference, applying bonemeal creates 15 happyVillager particles.
     "heldItem": "minecraft:diamond_pickaxe",
     "replacementBlock": "minecraft:stone",
     "damage": "1",
-    "particleType": "iconcrack:minecraft:stone:0",
+    "particleType": "iconcrack",
+    "particleArea": "out",
     "particleCount": "30:60"
   }
 ]

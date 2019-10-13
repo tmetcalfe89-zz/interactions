@@ -145,7 +145,7 @@ public class InteractionHandler {
 		if (recipe.spawnsParticles()) {
 			int count = recipe.rollForParticleCount();
 			for (int i = 0; i <= count; i++) {
-				double[] particlePosition = getParticlePosition(targetPosition, "out");
+				double[] particlePosition = getParticlePosition(targetPosition, recipe.getParticleArea());
 				world.spawnParticle(EnumParticleTypes.getByName(recipe.getParticleName()), particlePosition[0],
 						particlePosition[1], particlePosition[2], (float) Math.random() * 0.02D,
 						(float) Math.random() * 0.02D, (float) Math.random() * 0.02D,

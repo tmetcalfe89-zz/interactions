@@ -75,6 +75,10 @@ public class InteractRecipe {
 	 */
 	public String particleType = "";
 	/**
+	 * One of 'in' or 'out'. Where the particles are created.
+	 */
+	public String particleArea = "in";
+	/**
 	 * The number of particles (from x to y represented as x:y) to be emitted.
 	 */
 	public String particleCount = "15";
@@ -264,6 +268,10 @@ public class InteractRecipe {
 			return targetBlockId.replace('*', '0');
 		}
 		return (splitParticleType[1] + ":" + splitParticleType[2] + ":" + splitParticleType[3]);
+	}
+
+	public String getParticleArea() {
+		return particleArea;
 	}
 
 	/**

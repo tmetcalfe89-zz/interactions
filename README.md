@@ -1,4 +1,4 @@
-﻿# interactions
+# interactions
 Add (right-click) interactions to Minecraft.
 
 This is a simple mod to add interactions on right-click. It is intended for use by modpack developers and does nothing out of the box.
@@ -21,7 +21,9 @@ It adds a folder in the Minecraft directory called "interactions". Create a JSON
     "damageChance": "<x>:<y>",                            // If this interaction damages the hand item, it has x in y chances to do so. (optional),
     "particleType": "<particletype>:<parameter>",         // If this interaction emits particles, it emits these particles. (both parts optional),
     "particleArea": "<in/out>",                           // If this interaction emits particles, it emits the particles here in reference to the target block. "in" emits the particles inside the block, "out" emits them just slightly outside. (optional, defaults to "in")
-    "particleCount": "<x>:<y>"                            // If this interaction emits particles, it emits between x and y (y can be left out for an exact amount). (optional)
+    "particleCount": "<x>:<y>",                           // If this interaction emits particles, it emits between x and y (y can be left out for an exact amount). (optional)
+    "expChance": "<x>:<y>",                               // If this interaction drops experience, it has x in y chances to do so. (optional)
+    "expCount": "<x>:<y>"                                 // If this interactions drops experience, it drops between x and y (y can be left out for an exact amount). (optional)
   }
 ]
 

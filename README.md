@@ -1,7 +1,7 @@
 # interactions
 Add (right-click) interactions to Minecraft.
 
-This is a simple mod to add interactions on right-click. It is intended for use by modpack developers and does nothing out of the box.
+This is a mod to add interactions on right-click. It is intended for use by modpack developers and does nothing out of the box.
 
 It adds a folder in the Minecraft directory called "interactions". Create a JSON file in there with any name you'd like and add entries matching the following:
 
@@ -10,6 +10,7 @@ It adds a folder in the Minecraft directory called "interactions". Create a JSON
   {
     "targetBlock": "<namespace>:<block>:<metadata>",      // The block that is interacted with must match this to activate this block.
     "heldItem": "<namespace>:<item>:<metadata>",          // The player must have this item in their hand.
+    "offhandItem": "<namespace>:<item>:<metadata>",       // The player must have this item in their offhand. (optional)
     "replacementBlock": "<namespace>:<block>:<metadata>", // If this interaction replaces the target block, it replaces with this. (optional)
     "replacementChance": "<x>:<y>",                       // If this interaction replaces the target block, it has x in y chances to do so. (optional)
     "dropItem": "<namespace>:<item>:<metadata>",          // If this interaction drops an item, it drops this. (optional)
@@ -17,13 +18,12 @@ It adds a folder in the Minecraft directory called "interactions". Create a JSON
     "dropChance": "<x>:<y>",                              // If this interaction drops an item, it has x in y chances to do so. (optional)
     "dropCount": "<x>:<y>",                               // If this interactions drops an item, it drops between x and y (y can be left out for an exact amount). (optional)
     "damage": "<x>",                                      // If this interaction damages the hand item, it does this much damage. (optional)
+    "damageOffhand": "<x>",                               // If this interaction damages the offhand item, it does this much damage. (optional)
     "damageOnlyOnSuccess": "<true/false>",                // If this interaction damages the hand item, setting this to true only allows the damage if block replacement was successful. (optional)
     "damageChance": "<x>:<y>",                            // If this interaction damages the hand item, it has x in y chances to do so. (optional),
     "particleType": "<particletype>:<parameter>",         // If this interaction emits particles, it emits these particles. (both parts optional),
     "particleArea": "<in/out>",                           // If this interaction emits particles, it emits the particles here in reference to the target block. "in" emits the particles inside the block, "out" emits them just slightly outside. (optional, defaults to "in")
-    "particleCount": "<x>:<y>",                           // If this interaction emits particles, it emits between x and y (y can be left out for an exact amount). (optional)
-    "expChance": "<x>:<y>",                               // If this interaction drops experience, it has x in y chances to do so. (optional)
-    "expCount": "<x>:<y>"                                 // If this interactions drops experience, it drops between x and y (y can be left out for an exact amount). (optional)
+    "particleCount": "<x>:<y>"                            // If this interaction emits particles, it emits between x and y (y can be left out for an exact amount). (optional)
   }
 ]
 

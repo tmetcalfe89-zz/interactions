@@ -6,9 +6,12 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
@@ -17,6 +20,7 @@ import us.timinc.interactions.recipe.InteractRecipe;
 import us.timinc.interactions.recipe.InteractRecipes;
 import us.timinc.interactions.util.IdUtil;
 import us.timinc.interactions.util.MinecraftUtil;
+import us.timinc.interactions.util.PointUtil;
 import us.timinc.interactions.util.RandUtil;
 
 /**
@@ -117,7 +121,37 @@ public class InteractionHandler {
 		// If the recipe drops an item from the target block, roll for it,
 		// and do it if successful.
 		if (recipe.dropsItem(success) && recipe.rollForDropItem()) {
-			EntityItem itemDropEntity = MinecraftUtil.createEntityItem(world, targetPosition, recipe.createDrop());
+//			EntityItem itemDropEntity = MinecraftUtil.createEntityItem(world, event.getPos()., recipe.createDrop());
+			PointUtil itemDropEntityPos = new PointUtil(event.getPos().getX() + 0.5, event.getPos().getY() + 0.5, event.getPos().getZ() + 0.5);
+			switch(event.getFace()) {
+				case EAST:
+					itemDropEntityPos.x += 0.6;
+					break;
+				case WEST:
+					itemDropEntityPos.x -= 0.6;
+					break;
+				case UP:
+					itemDropEntityPos.y += 0.6;
+					break;
+				case DOWN:
+					itemDropEntityPos.y -= 0.6;
+					break;
+				case NORTH:
+					itemDropEntityPos.z -= 0.6;
+					break;
+				case SOUTH:
+					itemDropEntityPos.z += 0.6;
+					break;
+			}
+
+			EntityItem itemDropEntity = new EntityItem(
+					world,
+					itemDropEntityPos.x,
+					itemDropEntityPos.y,
+					itemDropEntityPos.z,
+					recipe.createDrop()
+			);
+			System.out.println(itemDropEntity.getPosition());
 
 			world.spawnEntity(itemDropEntity);
 		}

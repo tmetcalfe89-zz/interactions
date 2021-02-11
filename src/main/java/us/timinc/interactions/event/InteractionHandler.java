@@ -121,37 +121,7 @@ public class InteractionHandler {
 		// If the recipe drops an item from the target block, roll for it,
 		// and do it if successful.
 		if (recipe.dropsItem(success) && recipe.rollForDropItem()) {
-//			EntityItem itemDropEntity = MinecraftUtil.createEntityItem(world, event.getPos()., recipe.createDrop());
-			PointUtil itemDropEntityPos = new PointUtil(event.getPos().getX() + 0.5, event.getPos().getY() + 0.5, event.getPos().getZ() + 0.5);
-			switch(event.getFace()) {
-				case EAST:
-					itemDropEntityPos.x += 0.6;
-					break;
-				case WEST:
-					itemDropEntityPos.x -= 0.6;
-					break;
-				case UP:
-					itemDropEntityPos.y += 0.6;
-					break;
-				case DOWN:
-					itemDropEntityPos.y -= 0.6;
-					break;
-				case NORTH:
-					itemDropEntityPos.z -= 0.6;
-					break;
-				case SOUTH:
-					itemDropEntityPos.z += 0.6;
-					break;
-			}
-
-			EntityItem itemDropEntity = new EntityItem(
-					world,
-					itemDropEntityPos.x,
-					itemDropEntityPos.y,
-					itemDropEntityPos.z,
-					recipe.createDrop()
-			);
-			System.out.println(itemDropEntity.getPosition());
+			EntityItem itemDropEntity = MinecraftUtil.createEntityItem(world, event.getHitVec(), recipe.createDrop());
 
 			world.spawnEntity(itemDropEntity);
 		}

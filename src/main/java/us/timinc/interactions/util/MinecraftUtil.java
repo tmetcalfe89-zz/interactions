@@ -5,6 +5,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 
@@ -37,7 +38,7 @@ public class MinecraftUtil {
 	/**
 	 * Convenience method for creating an entity item using a position instead
 	 * of the x, y, z coordinates.
-	 * 
+	 *
 	 * @param world
 	 *            The world in which the entity will exist.
 	 * @param position
@@ -48,6 +49,22 @@ public class MinecraftUtil {
 	 */
 	public static EntityItem createEntityItem(World world, BlockPos position, ItemStack itemStack) {
 		return new EntityItem(world, position.getX(), position.getY(), position.getZ(), itemStack);
+	}
+
+	/**
+	 * Convenience method for creating an entity item using a vec3d instead
+	 * of the x, y, z coordinates.
+	 *
+	 * @param world
+	 *            The world in which the entity will exist.
+	 * @param position
+	 *            The position at which the entity will exist.
+	 * @param itemStack
+	 *            The item stack which the entity will hold.
+	 * @return A new entity item.
+	 */
+	public static EntityItem createEntityItem(World world, Vec3d position, ItemStack itemStack) {
+		return new EntityItem(world, position.x, position.y, position.z, itemStack);
 	}
 
 	/**
